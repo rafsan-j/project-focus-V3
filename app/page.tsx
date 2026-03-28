@@ -698,5 +698,3 @@ function ModuleRow({ m, i, isActive, isLocked, courseId, onToggle, onNote, onOpe
     </div>
   )
 }
-
-type Module = { id: string; course_id: string; title: string; resource_url: string; order_index: number; is_completed: boolean; notes: string; duration_mins: number }
