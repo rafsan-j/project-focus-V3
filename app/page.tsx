@@ -111,33 +111,39 @@ export default function App() {
 
   // ── AI MODULE GENERATION ──
   async function generateModules() {
-    if (!newUrl && !newTitle) { showToast('Enter a URL or title first.'); return }
-    setAiLoading(true)
-    setAiModules([])
-    try {
-      const res = await fetch('/api/ai-course', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url: newUrl, title: newTitle,
-          category: categories.find(c=>c.id===newCatId)?.name,
-          goals: profile?.goals || []
-        })
+  if (!newUrl && !newTitle) { showToast('Enter a URL or title first.'); return }
+  setAiLoading(true)
+  setAiModules([])
+  try {
+    const res = await fetch('/api/ai-course', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: newUrl,
+        title: newTitle,
+        category: categories.find(c => c.id === newCatId)?.name,
+        goals: profile?.goals || []
       })
-      const data = await res.json()
-      if (data.modules?.length) {
-        setAiModules(data.modules)
-        showToast(`AI generated ${data.modules.length} modules!`)
-      } else {
-        showToast('AI could not generate modules. Switch to manual.')
-        setManualMode(true)
-      }
-    } catch {
-      showToast('AI error. Use manual mode.')
+    })
+    const data = await res.json()
+
+    if (data.modules?.length) {
+      setAiModules(data.modules)
+      showToast(`✨ AI generated ${data.modules.length} modules!`)
+    } else {
+      // Show the actual error from the server
+      const reason = data.debug === 'missing_key'
+        ? 'OpenRouter API key missing in Vercel env vars'
+        : data.error || 'Unknown error'
+      showToast(`AI error: ${reason}`)
       setManualMode(true)
     }
-    setAiLoading(false)
+  } catch (err: any) {
+    showToast(`Network error: ${err.message}`)
+    setManualMode(true)
   }
+  setAiLoading(false)
+}
 
   // ── ADD COURSE ──
   async function addCourse() {
