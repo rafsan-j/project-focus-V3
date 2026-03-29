@@ -22,7 +22,7 @@ Reply ONLY with a JSON array, no markdown, no explanation:
 Generate 3 to 6 modules.`
 
     const body = {
-      model: 'mistralai/mistral-7b-instruct:free',
+      model: 'meta-llama/llama-3.2-3b-instruct:free',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 800,
       temperature: 0.3,
