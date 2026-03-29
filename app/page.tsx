@@ -130,7 +130,7 @@ export default function App() {
 
     if (data.modules?.length) {
       setAiModules(data.modules)
-      showToast(`✨ AI generated ${data.modules.length} modules!`)
+      showToast(`✨ AI generated ${data.modules.length} modules via ${data.model_used?.split('/')[1] || 'AI'}!`)
     } else {
       const detail = data.openrouter_message || data.openrouter_code || data.error || 'Unknown'
       showToast(`AI error: ${detail}`)
