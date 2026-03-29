@@ -126,16 +126,15 @@ export default function App() {
       })
     })
     const data = await res.json()
+    console.log('AI response:', JSON.stringify(data, null, 2))
 
     if (data.modules?.length) {
       setAiModules(data.modules)
       showToast(`✨ AI generated ${data.modules.length} modules!`)
     } else {
-      // Show the actual error from the server
-      const reason = data.debug === 'missing_key'
-        ? 'OpenRouter API key missing in Vercel env vars'
-        : data.error || 'Unknown error'
-      showToast(`AI error: ${reason}`)
+      const detail = data.openrouter_message || data.openrouter_code || data.error || 'Unknown'
+      showToast(`AI error: ${detail}`)
+      console.error('Full AI error:', data)
       setManualMode(true)
     }
   } catch (err: any) {
